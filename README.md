@@ -1,8 +1,8 @@
-# 💅 Nail Salon Yelp Crawler & AI Outreach Agent
+# Nail Salon Yelp Crawler & AI Outreach Agent
 
 An automated lead generation tool designed to help freelance web developers find potential clients. This agent crawls Yelp for nail salons in the San Francisco Bay Area that currently lack a website, generates personalized AI outreach messages using GPT-4o-mini, and compiles them into a beautiful HTML report.
 
-## 🚀 Features
+## Features
 
 - **Smart City Rotation:** Automatically iterates through a list of Bay Area cities.
 - **Deduplication:** Remembers previously discovered salons to ensure you never process the same lead twice.
