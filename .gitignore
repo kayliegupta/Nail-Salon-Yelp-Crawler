@@ -1,3 +1,14 @@
+# Environment Variables
 .env
-nail_salon_leads.txt
+
+# Local Data / Persistence
+.seen_salons.json
+.city_state.json
+
+# Output Files (Optional: keep if you want to track leads in git, ignore if not)
+nail_salon_leads.html
 nail_salon_leads.csv
+
+# Python
+__pycache__/
+.DS_Store
