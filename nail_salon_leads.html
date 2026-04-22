@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nail Salon Leads — Run #2</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #fdf6f0;
+            color: #1a1a1a;
+            min-height: 100vh;
+            padding: 0 0 80px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1f1f 100%);
+            color: white;
+            padding: 52px 40px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '💅';
+            position: absolute;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 120px;
+            opacity: 0.07;
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; left: 0; right: 0;
+            height: 40px;
+            background: #fdf6f0;
+            clip-path: ellipse(55% 100% at 50% 100%);
+        }
+        .header-inner {
+            max-width: 860px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .header-eyebrow {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #e8b4a0;
+            margin-bottom: 14px;
+        }
+        .header h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(30px, 5vw, 46px);
+            font-weight: 400;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+        .header h1 span { color: #e8b4a0; }
+        .header-meta {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+        }
+        .header-meta strong { color: rgba(255,255,255,0.85); font-weight: 500; }
+
+        .stats-bar {
+            max-width: 860px;
+            margin: 32px auto 0;
+            padding: 0 24px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .stat-pill {
+            background: white;
+            border: 1px solid #ede0d8;
+            border-radius: 100px;
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #5a3e35;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .stat-pill span { color: #c0614a; font-weight: 600; }
+
+        .leads-container {
+            max-width: 860px;
+            margin: 28px auto 0;
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #ede0d8;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: slideUp 0.4s ease forwards;
+        }
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 24px;
+            border-bottom: 1px solid #f5ede8;
+            background: linear-gradient(to right, #fffaf7, white);
+        }
+        .lead-number {
+            font-family: 'DM Serif Display', serif;
+            font-size: 30px;
+            color: #dcc4b8;
+            line-height: 1;
+            min-width: 38px;
+        }
+        .card-title-block { flex: 1; min-width: 0; }
+        .salon-name {
+            font-family: 'DM Serif Display', serif;
+            font-size: 20px;
+            font-weight: 400;
+            color: #1a1a1a;
+            line-height: 1.25;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .city-tag {
+            font-size: 12px;
+            font-weight: 500;
+            color: #8a6a5e;
+            letter-spacing: 0.04em;
+            margin-top: 3px;
+            display: block;
+        }
+        .no-site-badge {
+            background: #fff0ec;
+            color: #c0614a;
+            border: 1px solid #f5c8bc;
+            border-radius: 100px;
+            padding: 5px 14px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .card-body { padding: 18px 24px; }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .info-icon { font-size: 16px; margin-top: 2px; flex-shrink: 0; }
+        .info-label {
+            display: block;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #b09a90;
+            margin-bottom: 3px;
+        }
+        .info-value {
+            font-size: 14px;
+            color: #2a2a2a;
+            line-height: 1.4;
+        }
+        .info-value.stars { color: #c0614a; }
+        .info-value.stars em {
+            color: #8a6a5e;
+            font-style: normal;
+            font-size: 12px;
+        }
+        .yelp-link {
+            font-size: 14px;
+            color: #c0614a;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.15s;
+        }
+        .yelp-link:hover { border-color: #c0614a; }
+
+        .outreach-block {
+            background: #fdf8f5;
+            border: 1px solid #ede0d8;
+            border-left: 3px solid #e8b4a0;
+            border-radius: 10px;
+            padding: 14px 18px;
+        }
+        .outreach-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #b09a90;
+            margin-bottom: 8px;
+        }
+        .outreach-text {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #3a2e2a;
+        }
+
+        .footer {
+            max-width: 860px;
+            margin: 48px auto 0;
+            padding: 0 24px;
+            text-align: center;
+            font-size: 12px;
+            color: #b09a90;
+            line-height: 1.8;
+        }
+        .footer strong { color: #8a6a5e; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-inner">
+            <div class="header-eyebrow">Freelance Web Dev · Lead Report</div>
+            <h1>Bay Area Nail Salons<br><span>Without a Website</span></h1>
+            <div class="header-meta">
+                <span>🗓 April 21, 2026 at 06:42 PM</span>
+                <span>📋 Run <strong>#2</strong></span>
+                <span>📍 <strong>10 new leads</strong> this run</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-bar">
+        <div class="stat-pill">🎯 <span>10</span> leads this run</div>
+        <div class="stat-pill">🏙 Bay Area cities searched</div>
+        <div class="stat-pill">🤖 AI outreach included</div>
+        <div class="stat-pill">✅ Zero duplicates</div>
+    </div>
+
+    <div class="leads-container">
+        
+        <div class="card" style="animation-delay: 0.07s">
+            <div class="card-header">
+                <div class="lead-number">01</div>
+                <div class="card-title-block">
+                    <h2 class="salon-name">Nali Nails & Spa</h2>
+                    <span class="city-tag">San Francisco</span>
+                </div>
+                <div class="no-site-badge">No Website</div>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <div class="info-item">
+                        <span class="info-icon">📞</span>
+                        <div>
+                            <span class="info-label">Phone</span>
+                            <span class="info-value">(415) 872-9000</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <div>
+                            <span class="info-label">Address</span>
+                            <span class="info-value">1971 Sutter St, San Francisco, CA, 94115</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">⭐</span>
+                        <div>
+                            <span class="info-label">Rating</span>
+                            <span class="info-value stars">★★★★☆ <em>(276 reviews)</em></span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🔗</span>
+                        <div>
+                            <span class="info-label">Yelp Page</span>
+                            <a class="yelp-link" href="https://www.yelp.com/biz/nali-nails-and-spa-san-francisco-2?adjust_creative=zTAjq6mq5pl-r-vmI81f0Q&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=zTAjq6mq5pl-r-vmI81f0Q" target="_blank">View on Yelp →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="outreach-block">
+                    <div class="outreach-label">✍️ AI Outreach Note</div>
+                    <p class="outreach-text">Hi there! I just came across Nali Nails & Spa in San Francisco and noticed you don’t have a website yet. With your great Yelp rating, having an online presence could really help attract more customers and showcase your services. I’d love to chat about how a simple website can boost your business—are you open to a quick call?</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="animation-delay: 0.14s">
+            <div class="card-header">
+                <div class="lead-number">02</div>
+                <div class="card-title-block">
+                    <h2 class="salon-name">Velvety Nails and Beauty Spa</h2>
+                    <span class="city-tag">San Francisco</span>
+                </div>
+                <div class="no-site-badge">No Website</div>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <div class="info-item">
+                        <span class="info-icon">📞</span>
+                        <div>
+                            <span class="info-label">Phone</span>
+                            <span class="info-value">(415) 345-1688</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <div>
+                            <span class="info-label">Address</span>
+                            <span class="info-value">2183 Sutter St, San Francisco, CA, 94115</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">⭐</span>
+                        <div>
+                            <span class="info-label">Rating</span>
+                            <span class="info-value stars">★★★★☆ <em>(152 reviews)</em></span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🔗</span>
+                        <div>
+                            <span class="info-label">Yelp Page</span>
+                            <a class="yelp-link" href="https://www.yelp.com/biz/velvety-nails-and-beauty-spa-san-francisco?adjust_creative=zTAjq6mq5pl-r-vmI81f0Q&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=zTAjq6mq5pl-r-vmI81f0Q" target="_blank">View on Yelp →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="outreach-block">
+                    <div class="outreach-label">✍️ AI Outreach Note</div>
+                    <p class="outreach-text">Hi there! I love the great reviews for Velvety Nails and Beauty Spa in San Francisco—4.7 stars is impressive! Not having a website might be holding you back from reaching more customers who are searching for your fantastic services online. I’d love to chat about how a simple website could help boost your business. Would you be open to a quick call?</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="animation-delay: 0.21000000000000002s">
+            <div class="card-header">
+                <div class="lead-number">03</div>
+                <div class="card-title-block">
+                    <h2 class="salon-name">Sensi Luxury Nails & Spa</h2>
+                    <span class="city-tag">San Francisco</span>
+                </div>
+                <div class="no-site-badge">No Website</div>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <div class="info-item">
+                        <span class="info-icon">📞</span>
+                        <div>
+                            <span class="info-label">Phone</span>
+                            <span class="info-value">(415) 665-6245</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <div>
+                            <span class="info-label">Address</span>
+                            <span class="info-value">338 Judah St, San Francisco, CA, 94122</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">⭐</span>
+                        <div>
+                            <span class="info-label">Rating</span>
+                            <span class="info-value stars">★★★★☆ <em>(510 reviews)</em></span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🔗</span>
+                        <div>
+                            <span class="info-label">Yelp Page</span>
+                            <a class="yelp-link" href="https://www.yelp.com/biz/sensi-luxury-nails-and-spa-san-francisco?adjust_creative=zTAjq6mq5pl-r-vmI81f0Q&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=zTAjq6mq5pl-r-vmI81f0Q" target="_blank">View on Yelp →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="outreach-block">
+                    <div class="outreach-label">✍️ AI Outreach Note</div>
+                    <p class="outreach-text">Hi there! I love what you’re doing at Sensi Luxury Nails & Spa in San Francisco—your Yelp rating speaks volumes! Not having a website might be missing out on potential customers who prefer to book online. I'd love to chat about how a simple website can help you attract even more clients. How about a quick consult?</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="animation-delay: 0.28s">
+            <div class="card-header">
+                <div class="lead-number">04</div>
+                <div class="card-title-block">
+                    <h2 class="salon-name">Mac Nail Spa</h2>
+                    <span class="city-tag">San Francisco</span>
+                </div>
+                <div class="no-site-badge">No Website</div>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <div class="info-item">
+                        <span class="info-icon">📞</span>
+                        <div>
+                            <span class="info-label">Phone</span>
+                            <span class="info-value">(415) 567-0162</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <div>
+                            <span class="info-label">Address</span>
+                            <span class="info-value">783 Divisadero St, San Francisco, CA, 94117</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">⭐</span>
+                        <div>
+                            <span class="info-label">Rating</span>
+                            <span class="info-value stars">★★★★☆ <em>(259 reviews)</em></span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🔗</span>
+                        <div>
+                            <span class="info-label">Yelp Page</span>
+                            <a class="yelp-link" href="https://www.yelp.com/biz/mac-nail-spa-san-francisco?adjust_creative=zTAjq6mq5pl-r-vmI81f0Q&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=zTAjq6mq5pl-r-vmI81f0Q" target="_blank">View on Yelp →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="outreach-block">
+                    <div class="outreach-label">✍️ AI Outreach Note</div>
+                    <p class="outreach-text">Hi there! I noticed that Mac Nail Spa in San Francisco has an impressive 4.3-star rating on Yelp, which is fantastic! Without a website, you might be missing out on new customers who are searching for services online. I'd love to chat about how a simple website could help showcase your salon’s offerings. Would you be open to a quick call?</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="animation-delay: 0.35000000000000003s">
+            <div class="card-header">
+                <div class="lead-number">05</div>
+                <div class="card-title-block">
+                    <h2 class="salon-name">Q Spa</h2>
+                    <span class="city-tag">San Francisco</span>
+                </div>
+                <div class="no-site-badge">No Website</div>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <div class="info-item">
+                        <span class="info-icon">📞</span>
+                        <div>
+                            <span class="info-label">Phone</span>
+                            <span class="info-value">(415) 626-6264</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <div>
+                            <span class="info-label">Address</span>
+                            <span class="info-value">211 Steiner St, San Francisco, CA, 94117</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">⭐</span>
+                        <div>
+                            <span class="info-label">Rating</span>
+                            <span class="info-value stars">★★★★☆ <em>(131 reviews)</em></span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🔗</span>
+                        <div>
+                            <span class="info-label">Yelp Page</span>
+                            <a class="yelp-link" href="https://www.yelp.com/biz/q-spa-san-francisco-6?adjust_creative=zTAjq6mq5pl-r-vmI81f0Q&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=zTAjq6mq5pl-r-vmI81f0Q" target="_blank">View on Yelp →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="outreach-block">
+                    <div class="outreach-label">✍️ AI Outreach Note</div>
+                    <p class="outreach-text">Hi there! I came across Q Spa in San Francisco and noticed your fantastic 4.3-star Yelp rating. Having no website might be missing out on attracting new customers who are searching for services online. I’d love to chat about how I can help you create a beautiful online presence—would you be open to a quick, free consult?</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="animation-delay: 0.42000000000000004s">
+            <div class="card-header">
+                <div class="lead-number">06</div>
+                <div class="card-title-block">
+                    <h2 class="salon-name">Zorina Nail Studio - 550 Pacific Ave</h2>
+                    <span class="city-tag">San Francisco</span>
+                </div>
+                <div class="no-site-badge">No Website</div>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <div class="info-item">
+                        <span class="info-icon">📞</span>
+                        <div>
+                            <span class="info-label">Phone</span>
+                            <span class="info-value">(628) 233-6544</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <div>
+                            <span class="info-label">Address</span>
+                            <span class="info-value">550 Pacific Ave, San Francisco, CA, 94133</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">⭐</span>
+                        <div>
+                            <span class="info-label">Rating</span>
+                            <span class="info-value stars">★★★★☆ <em>(81 reviews)</em></span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🔗</span>
+                        <div>
+                            <span class="info-label">Yelp Page</span>
+                            <a class="yelp-link" href="https://www.yelp.com/biz/zorina-nail-studio-550-pacific-ave-san-francisco-3?adjust_creative=zTAjq6mq5pl-r-vmI81f0Q&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=zTAjq6mq5pl-r-vmI81f0Q" target="_blank">View on Yelp →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="outreach-block">
+                    <div class="outreach-label">✍️ AI Outreach Note</div>
+                    <p class="outreach-text">Hi there! I came across Zorina Nail Studio in San Francisco and noticed your fantastic 4.5-star rating on Yelp. Without a website, potential customers may be missing out on discovering your amazing services. I’d love to chat about how a simple website could help attract more clients. Would you be open to a quick call or a free consultation?</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="animation-delay: 0.49000000000000005s">
+            <div class="card-header">
+                <div class="lead-number">07</div>
+                <div class="card-title-block">
+                    <h2 class="salon-name">The Avenues Spa</h2>
+                    <span class="city-tag">San Francisco</span>
+                </div>
+                <div class="no-site-badge">No Website</div>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <div class="info-item">
+                        <span class="info-icon">📞</span>
+                        <div>
+                            <span class="info-label">Phone</span>
+                            <span class="info-value">(415) 702-6735</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <div>
+                            <span class="info-label">Address</span>
+                            <span class="info-value">3929 California St, San Francisco, CA, 94118</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">⭐</span>
+                        <div>
+                            <span class="info-label">Rating</span>
+                            <span class="info-value stars">★★★★☆ <em>(321 reviews)</em></span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🔗</span>
+                        <div>
+                            <span class="info-label">Yelp Page</span>
+                            <a class="yelp-link" href="https://www.yelp.com/biz/the-avenues-spa-san-francisco?adjust_creative=zTAjq6mq5pl-r-vmI81f0Q&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=zTAjq6mq5pl-r-vmI81f0Q" target="_blank">View on Yelp →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="outreach-block">
+                    <div class="outreach-label">✍️ AI Outreach Note</div>
+                    <p class="outreach-text">Hi there! I love what you’re doing at The Avenues Spa in San Francisco—your 4.4-star rating speaks volumes! Without a website, you might be missing out on potential customers who are searching for services online. I’d love to chat about how a simple website could help grow your business. Would you be open to a quick consult?</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="animation-delay: 0.56s">
+            <div class="card-header">
+                <div class="lead-number">08</div>
+                <div class="card-title-block">
+                    <h2 class="salon-name">Me Too Nail Studio</h2>
+                    <span class="city-tag">San Francisco</span>
+                </div>
+                <div class="no-site-badge">No Website</div>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <div class="info-item">
+                        <span class="info-icon">📞</span>
+                        <div>
+                            <span class="info-label">Phone</span>
+                            <span class="info-value">(415) 718-2196</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <div>
+                            <span class="info-label">Address</span>
+                            <span class="info-value">660 Market St, San Francisco, CA, 94104</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">⭐</span>
+                        <div>
+                            <span class="info-label">Rating</span>
+                            <span class="info-value stars">★★★★★ <em>(5 reviews)</em></span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🔗</span>
+                        <div>
+                            <span class="info-label">Yelp Page</span>
+                            <a class="yelp-link" href="https://www.yelp.com/biz/me-too-nail-studio-san-francisco?adjust_creative=zTAjq6mq5pl-r-vmI81f0Q&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=zTAjq6mq5pl-r-vmI81f0Q" target="_blank">View on Yelp →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="outreach-block">
+                    <div class="outreach-label">✍️ AI Outreach Note</div>
+                    <p class="outreach-text">Hi there! I love the name Me Too Nail Studio and am thrilled to see your fantastic 5.0 stars on Yelp in San Francisco! Without a website, you might be missing out on potential customers who prefer to browse online before booking. I’d love to chat about how a website can help showcase your amazing services and attract more clients—let me know if you’d like a free consult!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="animation-delay: 0.6300000000000001s">
+            <div class="card-header">
+                <div class="lead-number">09</div>
+                <div class="card-title-block">
+                    <h2 class="salon-name">Plush Nails Spa</h2>
+                    <span class="city-tag">San Francisco</span>
+                </div>
+                <div class="no-site-badge">No Website</div>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <div class="info-item">
+                        <span class="info-icon">📞</span>
+                        <div>
+                            <span class="info-label">Phone</span>
+                            <span class="info-value">(415) 821-1704</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <div>
+                            <span class="info-label">Address</span>
+                            <span class="info-value">1791 Church St, San Francisco, CA, 94131</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">⭐</span>
+                        <div>
+                            <span class="info-label">Rating</span>
+                            <span class="info-value stars">★★★★☆ <em>(139 reviews)</em></span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🔗</span>
+                        <div>
+                            <span class="info-label">Yelp Page</span>
+                            <a class="yelp-link" href="https://www.yelp.com/biz/plush-nails-spa-san-francisco?adjust_creative=zTAjq6mq5pl-r-vmI81f0Q&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=zTAjq6mq5pl-r-vmI81f0Q" target="_blank">View on Yelp →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="outreach-block">
+                    <div class="outreach-label">✍️ AI Outreach Note</div>
+                    <p class="outreach-text">Hi there! I came across Plush Nails Spa in San Francisco and noticed your fantastic 4.5-star Yelp rating. Having a website could help attract even more customers who are searching for great nail services online. I’d love to offer a free consult to discuss how we can elevate your salon’s online presence!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="animation-delay: 0.7000000000000001s">
+            <div class="card-header">
+                <div class="lead-number">10</div>
+                <div class="card-title-block">
+                    <h2 class="salon-name">Pinkie Nails</h2>
+                    <span class="city-tag">San Francisco</span>
+                </div>
+                <div class="no-site-badge">No Website</div>
+            </div>
+            <div class="card-body">
+                <div class="info-row">
+                    <div class="info-item">
+                        <span class="info-icon">📞</span>
+                        <div>
+                            <span class="info-label">Phone</span>
+                            <span class="info-value">(415) 347-7990</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <div>
+                            <span class="info-label">Address</span>
+                            <span class="info-value">2671 Ocean Ave, San Francisco, CA, 94132</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">⭐</span>
+                        <div>
+                            <span class="info-label">Rating</span>
+                            <span class="info-value stars">★★★★☆ <em>(17 reviews)</em></span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">🔗</span>
+                        <div>
+                            <span class="info-label">Yelp Page</span>
+                            <a class="yelp-link" href="https://www.yelp.com/biz/pinkie-nails-san-francisco-2?adjust_creative=zTAjq6mq5pl-r-vmI81f0Q&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=zTAjq6mq5pl-r-vmI81f0Q" target="_blank">View on Yelp →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="outreach-block">
+                    <div class="outreach-label">✍️ AI Outreach Note</div>
+                    <p class="outreach-text">Hi there! I came across Pinkie Nails in San Francisco and noticed your fantastic 4.9-star Yelp rating—what an achievement! Without a website, you might be missing out on potential customers searching for nail salons online. I’d love to chat about how a simple website could help showcase your amazing services. Would you be open to a quick chat?</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>Generated by <strong>Nail Salon Lead Agent v2</strong><br>
+        Each lead confirmed to have no website on Yelp · April 21, 2026 at 06:42 PM</p>
+    </div>
+</body>
+</html>
